@@ -14,6 +14,8 @@ import Signup from './components/Signup'
 import Dashboard from './components/Dashboard'
 import AllTransactions from './components/AllTransactions'
 import PrivateRoute from './components/PrivateRoute'
+import { Container } from 'semantic-ui-react'
+
 
 import * as api from './api'
 
@@ -89,7 +91,7 @@ class App extends React.Component {
     
     return (
       <Router>
-        <div>
+        <Container>
           <MenuBar/>
           <Route exact path="/" render={props => <Home {...props} isAuthenticated={isAuthenticated} />}/>
           <Route path="/login" render={props => <Login {...props} authenticate={this.authenticate} />}/>
@@ -100,7 +102,7 @@ class App extends React.Component {
           */}
           <PrivateRoute path="/dashboard" isAuthenticated={isAuthenticated} token={token} component={Dashboard}/>
           <PrivateRoute path="/transactions" isAuthenticated={isAuthenticated} token={token} user={user} component={AllTransactions}/>
-        </div>
+        </Container>
       </Router>
     )
   }
