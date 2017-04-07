@@ -38,6 +38,7 @@ export default class extends React.Component{
     e.preventDefault();
     transfer(this.state.targetNr, this.state.amount, this.props.token)
       .then(() => {
+        this.props.onNewTransaction();
         this.loadMyAccount();
       })
 
