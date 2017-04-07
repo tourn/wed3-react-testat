@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react'
+import NewTransaction from './NewTransaction'
 
 /*
   Use the api functions to call the API server. For example, the transactions
@@ -26,6 +27,7 @@ class Dashboard extends React.Component {
 
     return (
       <div>
+          <NewTransaction token={this.props.token}/>
         This is the dashboard
       </div>
     )
