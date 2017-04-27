@@ -25,6 +25,7 @@ class Login extends React.Component {
     login: string,
     password: string,
     error?: Error,
+    formError?: string,
     redirectToReferrer: boolean,
   }
   
@@ -32,6 +33,7 @@ class Login extends React.Component {
     login: "",
     password: "",
     error: undefined,
+    formError: undefined,
     redirectToReferrer: false,
   }
 
@@ -47,12 +49,31 @@ class Login extends React.Component {
     }
   }
 
+  validateForm = (login, password) => {
+    if(login === "" || login.length < 3){
+      this.setState({formError: "Login braucht mindestens 3 Zeichen"});
+      return false;
+    }
+
+    if(password === "" || password.length < 3){
+      this.setState({formError: "Passwort braucht mindestens 3 Zeichen"});
+      return false;
+    }
+
+    return true;
+  }
+
   handleSubmit = (event: Event) => {
     event.preventDefault()
     const { login, password } = this.state
+
+    if(!this.validateForm(login, password)){
+      return;
+    }
+
     this.props.authenticate(login, password, (error) => {
       if(error) {
-        this.setState({error})
+        this.setState({error: error, formError: undefined})
       } else {
         this.setState({redirectToReferrer: true, error: null})
       }
@@ -61,7 +82,7 @@ class Login extends React.Component {
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/dashboard' } }
-    const { redirectToReferrer, error } = this.state
+    const { redirectToReferrer, error, formError } = this.state
     
     if (redirectToReferrer) {
       return (
@@ -78,7 +99,8 @@ class Login extends React.Component {
           <Input onChange={this.handlePasswordChanged} placeholder='Password' type="password" value={this.state.password} />
           <Button onClick={this.handleSubmit}>Log-in</Button>
         </Form>
-        { error && <p>Es ist ein Fehler aufgetreten!</p> }
+        { formError && <p>{formError}</p>}
+        { error && <p>Login Daten sind nicht korrekt!</p> }
         <Link to="/signup">Noch keinen Account?</Link>
       </Container>
     )
