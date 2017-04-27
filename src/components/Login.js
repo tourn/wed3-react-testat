@@ -75,7 +75,7 @@ class Login extends React.Component {
       if(error) {
         this.setState({error: error, formError: undefined})
       } else {
-        this.setState({redirectToReferrer: true, error: null})
+        this.setState({redirectToReferrer: true, error: null, formError: undefined})
       }
     })
   }
