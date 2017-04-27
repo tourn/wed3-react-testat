@@ -59,7 +59,7 @@ export default class extends React.Component{
   }
 
   isValid = () => {
-    return this.state.targetAccount.owner && (this.state.amount <= this.state.sourceAccount.amount);
+    return this.state.targetAccount.owner && (this.state.amount <= this.state.sourceAccount.amount) && this.state.amount >= 0.05;
   }
 
   render = () => {
