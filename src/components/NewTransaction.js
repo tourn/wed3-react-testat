@@ -10,7 +10,10 @@ export default class extends React.Component{
       targetAccount: {},
       targetNr: "",
       amount: "",
-      loading:false
+      loading:false,
+        success: undefined,
+        error: undefined
+
     }
     this.loadMyAccount();
   }
@@ -28,10 +31,13 @@ export default class extends React.Component{
     })
     getAccount(e.target.value, this.props.token)
       .then(account => {
-        console.log(account);
-        this.setState({targetAccount: account})
+        if(account.accountNr != this.state.sourceAccount.accountNr){
+            this.setState({targetAccount: account})
+        }
       })
-      .catch(()=>{})
+      .catch(()=>{
+          this.setState({targetAccount: {}})
+      })
   }
 
   submit = (e) => {
@@ -39,8 +45,10 @@ export default class extends React.Component{
     transfer(this.state.targetNr, this.state.amount, this.props.token)
       .then(() => {
         this.props.onNewTransaction();
-        this.loadMyAccount();
-      })
+        this.loadMyAccount(); //to update account balance, maybe a bit much traffic, could be done clientside
+          this.setState({amount: ""})
+          this.setState({success: "Transaktion erfolgreich"})
+      }).catch(()=> "Ein Fehler ist aufgetreten!")
 
   }
 
@@ -57,6 +65,9 @@ export default class extends React.Component{
   render = () => {
     const source = this.state.sourceAccount;
     const target = this.state.targetAccount;
+
+    const {error, success} = this.state;
+
     return (
       <Form onSubmit={this.submit} loading={this.state.loading}>
         <Form.Input label="Von" value={`${source.accountNr} [${source.amount} chf.]`} readOnly/>
@@ -64,6 +75,8 @@ export default class extends React.Component{
         <p>{ target.owner && `${target.owner.firstname} ${target.owner.lastname}` }</p>
         <Form.Input label="CHF" value={this.state.amount} onChange={this.changeAmount} type="number"/>
         <Button type='submit' disabled={!this.isValid()}>Submit</Button>
+        {error && <p>{error}</p>}
+        {success && <p>{success}</p>}
       </Form>
     )
   }
