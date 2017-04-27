@@ -46,7 +46,7 @@ class AllTransactions extends React.Component {
 
         var to = new Date(this.state.year, this.state.month, 31)
         var from = new Date(this.state.year, this.state.month, 1)
-        getTransactions(this.props.token, from, to)
+        getTransactions(this.props.token, from, to, 100) //get max 100 transactions
             .then(transactions => this.setState({transactions: transactions.result}))
     }
     _onSelectMonth = (val) => {
